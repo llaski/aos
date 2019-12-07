@@ -1,4 +1,5 @@
-import detect from './detector';
+import detect from "./detector";
+import { getElementOffset } from "./container";
 
 /**
  * Adds multiple classes on node
@@ -20,7 +21,7 @@ const fireEvent = (eventName, data) => {
   let customEvent;
 
   if (detect.ie11()) {
-    customEvent = document.createEvent('CustomEvent');
+    customEvent = document.createEvent("CustomEvent");
     customEvent.initCustomEvent(eventName, true, true, { detail: data });
   } else {
     customEvent = new CustomEvent(eventName, {
@@ -43,7 +44,7 @@ const applyClasses = (el, top) => {
     if (!el.animated) return;
 
     removeClasses(node, options.animatedClassNames);
-    fireEvent('aos:out', node);
+    fireEvent("aos:out", node);
 
     if (el.options.id) {
       fireEvent(`aos:in:${el.options.id}`, node);
@@ -57,7 +58,7 @@ const applyClasses = (el, top) => {
 
     addClasses(node, options.animatedClassNames);
 
-    fireEvent('aos:in', node);
+    fireEvent("aos:in", node);
     if (el.options.id) {
       fireEvent(`aos:in:${el.options.id}`, node);
     }
@@ -77,10 +78,13 @@ const applyClasses = (el, top) => {
 /**
  * Scroll logic - add or remove 'aos-animate' class on scroll
  *
- * @param  {array} $elements         array of elements nodes
+ * @param  {array} $elements
+ * @param  {(HTMLElement|Window)}   container         AOS container   array of elements nodes
  * @return {void}
  */
-const handleScroll = $elements =>
-  $elements.forEach((el, i) => applyClasses(el, window.pageYOffset));
+const handleScroll = ($elements, container) => {
+  const top = getElementOffset(container);
+  $elements.forEach((el, i) => applyClasses(el, top));
+};
 
 export default handleScroll;
