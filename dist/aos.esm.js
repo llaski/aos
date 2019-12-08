@@ -156,6 +156,14 @@ var detect = new Detector();
  * @param  {(HTMLElement|Window|String)}  container    AOS container
  * @return {(HTMLElement|Window|null)}
  */
+var resolveContainer = function resolveContainer(container) {
+  if (container instanceof Element || container === window) return container;
+  if (typeof container === "string") {
+    var queryResult = document.querySelector(container);
+    if (queryResult) return queryResult;
+  }
+  return null;
+};
 
 /**
  * @param  {(HTMLElement|Window)}  container    AOS container
@@ -470,6 +478,7 @@ var options = {
   animatedClassName: 'aos-animate',
   initClassName: 'aos-init',
   useClassNames: false,
+  container: window,
   disableMutationObserver: false,
   throttleDelay: 99,
   debounceDelay: 50
@@ -482,16 +491,19 @@ var isBrowserNotSupported = function isBrowserNotSupported() {
 };
 
 var initializeScroll = function initializeScroll() {
-  // Extend elements objects in $aosElements with their positions
-  $aosElements = prepare($aosElements, options);
-  // Perform scroll event, to refresh view and show/hide elements
-  handleScroll($aosElements);
+  // Define container element
+  var container = resolveContainer(options.container);
+  if (!container) throw 'AOS - cannot find the container element. The container option must be an HTMLElement or a CSS Selector.';
+  // Extend elements objects in $aosElements with their positions	  // Extend elements objects in $aosElements with their positions
+  $aosElements = prepare($aosElements, options, container);
+  // Perform scroll event, to refresh view and show/hide elements	  // Perform scroll event, to refresh view and show/hide elements
+  handleScroll($aosElements, container);
 
   /**
    * Handle scroll event to animate elements on scroll
    */
-  window.addEventListener('scroll', throttle(function () {
-    handleScroll($aosElements, options.once);
+  container.addEventListener("scroll", throttle(function () {
+    handleScroll($aosElements, container);
   }, options.throttleDelay));
 
   return $aosElements;

@@ -56,9 +56,9 @@ const initializeScroll = function initializeScroll() {
   if (!container)
     throw `AOS - cannot find the container element. The container option must be an HTMLElement or a CSS Selector.`;
   // Extend elements objects in $aosElements with their positions	  // Extend elements objects in $aosElements with their positions
-  $aosElements = prepare($aosElements, options);	  $aosElements = prepare($aosElements, options, container);
+  $aosElements = prepare($aosElements, options, container);
   // Perform scroll event, to refresh view and show/hide elements	  // Perform scroll event, to refresh view and show/hide elements
-  handleScroll($aosElements);	  handleScroll($aosElements, container);
+  handleScroll($aosElements, container);
 
   /**
    * Handle scroll event to animate elements on scroll
