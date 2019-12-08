@@ -33,7 +33,7 @@ export const getPositionIn = (
     finalEl = document.querySelector(anchor);
   } else if (anchor && container.querySelector(anchor)) {
     finalEl = container.querySelector(anchor);
-  }	  }
+  }
 
   let triggerPoint = getOffset(finalEl, container).top - containerHeight;
 
@@ -81,7 +81,7 @@ export const getPositionOut = (el, container, defaultOffset) => {
     finalEl = document.querySelector(anchor);
   } else if (anchor && container.querySelector(anchor)) {
     finalEl = container.querySelector(anchor);
-  }	  }
+  }
 
   const elementOffsetTop = getOffset(finalEl, container).top;
 
